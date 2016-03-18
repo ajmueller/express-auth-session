@@ -18,12 +18,16 @@ userSchema.pre('save', function(next) {
 
 	bcrypt.genSalt(10, function(err, salt) {
 		if (err) {
-			return next(new Error('There was an error generating your password salt.'));
+			console.log(err);
+			req.flash('errors', { msg: 'There was an error generating your password salt.' });
+			return res.redirect('/');
 		}
 
 		bcrypt.hash(user.password, salt, function(err, hash) {
 			if (err) {
-				return next(new Error('There was an error hashing your password.'));
+				console.log(err);
+				req.flash('errors', { msg: 'There was an error hashing your password.' });
+				return res.redirect('/');
 			}
 
 			user.password = hash;

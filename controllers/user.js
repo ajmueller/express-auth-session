@@ -30,18 +30,22 @@ exports.register = {
 
 		User.findOne({ email: req.body.email }, function(err, existingUser) {
 			if (existingUser) {
-				req.flash('errors', { msg: 'A user with that email address already exists.  Please try another email address.'});
+				req.flash('errors', { msg: 'A user with that email address already exists.  Please try another email address.' });
 				return res.redirect('/user/register');
 			}
 
 			user.save(function(err) {
 				if (err) {
-					return next(new Error('There was an error creating the user in the database.  Please try again.'));
+					console.log(err);
+					req.flash('errors', { msg: 'There was an error creating the user in the database.  Please try again.' });
+					return res.redirect('/user/register');
 				}
 
 				utility.sendEmail(req.body.email, 'ajmueller6@gmail.com', 'Email Verification Required', '<p>Before you can log in, you must verify your email address:</p><a href="' + req.protocol + '://' + req.get('host') + '/user/verify/' + verificationToken + '">Verify your email address</a>', 'html', function(err, json) {
 					if (err) {
-						return next(new Error('There was an error sending your verification email.  Please try again.'));
+						console.log(err);
+						req.flash('errors', { msg: 'There was an error sending your verification email.  Please try again.' });
+						return res.redirect('/');
 					}
 
 					req.flash('info', { msg: 'Your account has been created, but you must verify your email before logging in.'});
@@ -60,7 +64,9 @@ exports.verify = {
 
 		User.findOneAndUpdate({ verificationToken: req.params.verificationToken }, { isVerified: true }, function(err, user) {
 			if (err) {
-				return next(new Error('There was an error verifying your email address.'));
+				console.log(err);
+				req.flash('errors', { msg: 'There was an error verifying your email address.' });
+				return res.redirect('/');
 			}
 
 			req.flash('success', { msg: 'Your email address has been verified.  You may now log in.' });
