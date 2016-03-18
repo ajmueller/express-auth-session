@@ -1,16 +1,28 @@
 require('dotenv').config();
 
 var express = require('express');
+var flash = require('express-flash');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var validator = require('express-validator');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var MongoStore = require('connect-mongo')(session);
+var config = require('./config');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var user = require('./routes/user');
 
 var app = express();
+
+mongoose.connect(config.db.uri);
+mongoose.connection.on('error', function() {
+	console.log('There is an issue with your MongoDB connection.  Please make sure MongoDB is running.');
+	process.exit(1);
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,11 +33,20 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(validator());
 app.use(cookieParser());
+app.use(session({
+	resave: true,
+	saveUninitialized: true,
+	secret: config.session.secret,
+	store: new MongoStore({ url: config.db.uri, autoReconnect: true })
+}));
+
+app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
+app.use('/user', user);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
