@@ -1,6 +1,7 @@
 var User = require('../models/user');
 var utility = require('../lib/utility');
 var passport = require('passport');
+var minimumPasswordLength = 8;
 
 exports.login = {
 	get: function(req, res) {
@@ -61,7 +62,7 @@ exports.register = {
 	},
 	post: function(req, res, next) {
 		req.assert('email', 'Please provide a valid email address.').isEmail();
-		req.assert('password', 'Please enter a password of at least 8 characters.').len(8);
+		req.assert('password', 'Please enter a password of at least ' + minimumPasswordLength + ' characters.').len(minimumPasswordLength);
 		req.assert('confirmPassword', 'Your passwords must match.').equals(req.body.password);
 
 		var errors = req.validationErrors();
