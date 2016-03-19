@@ -4,7 +4,7 @@ var passport = require('passport');
 
 exports.login = {
 	get: function(req, res) {
-		if (req.user) {
+		if (req.isAuthenticated()) {
 			return res.redirect('/');
 		}
 
@@ -53,7 +53,7 @@ exports.logout = {
 
 exports.register = {
 	get: function(req, res) {
-		if (req.user) {
+		if (req.isAuthenticated()) {
 			return res.redirect('/');
 		}
 
@@ -109,7 +109,7 @@ exports.register = {
 
 exports.verify = {
 	get: function(req, res) {
-		if (req.user) {
+		if (req.isAuthenticated()) {
 			return res.redirect('/');
 		}
 
@@ -160,7 +160,7 @@ exports.verifyResend = {
 		});
 	},
 	get: function(req, res) {
-		if (req.user) {
+		if (req.isAuthenticated()) {
 			return res.redirect('/');
 		}
 
