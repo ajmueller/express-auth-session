@@ -1,7 +1,51 @@
 var User = require('../models/user');
 var utility = require('../lib/utility');
 var passport = require('passport');
+var moment = require('moment');
 var minimumPasswordLength = 8;
+var passwordResetTimeLimitInHours = 1;
+
+exports.forgotPassword = {
+	get: function(req, res) {
+		if (req.isAuthenticated()) {
+			return res.redirect('/');
+		}
+
+		res.render('user/forgot-password', { title: 'Forgot Password' });
+	},
+	post: function(req, res, next) {
+		req.assert('email', 'Please provide a valid email address.').isEmail();
+
+		var errors = req.validationErrors();
+
+		if (errors) {
+			req.flash('errors', errors);
+			return res.redirect('/user/forgot-password');
+		}
+
+		var passwordResetToken = utility.createRandomToken(req.body.email);
+		var passwordResetExpires = moment().add(passwordResetTimeLimitInHours, 'hours');
+
+		User.findOneAndUpdate({ email: req.body.email }, { passwordResetToken: passwordResetToken, passwordResetExpires: passwordResetExpires }, function(err, user) {
+			if (err) {
+				console.log(err);
+				req.flash('errors', { msg: 'There was an error setting your password reset token.  Please try again.' });
+				return res.redirect('/user/forgot-password');
+			}
+
+			utility.sendEmail(req.body.email, 'ajmueller6@gmail.com', 'Password Reset Requested', '<p>You are receiving this email because you requested a password reset.  You have until ' + passwordResetExpires.format('LT') + ' to reset your password.  You may ignore this email and your password will remain unchanged.</p><a href="' + utility.constructUrl(req, '/user/reset-password/' + passwordResetToken) + '">Reset your password</a>', 'html', function(err, json) {
+					if (err) {
+						console.log(err);
+						req.flash('errors', { msg: 'There was an error sending your password reset email.  Please try again.' });
+						return res.redirect('/user/forgot-password');
+					}
+
+					req.flash('info', { msg: 'A password reset email has been sent to <em>' + req.body.email + '</em> with further instructions.' });
+					res.redirect('/');
+				});
+		});
+	}
+};
 
 exports.login = {
 	get: function(req, res) {
@@ -105,6 +149,74 @@ exports.register = {
 				});
 			});
 		});
+	}
+};
+
+exports.resetPassword = {
+	get: function(req, res) {
+		if (req.isAuthenticated()) {
+			return res.redirect('/');
+		}
+
+		User
+			.findOne({ passwordResetToken: req.params.passwordResetToken })
+			.where('passwordResetExpires').gt(moment())
+			.exec(function(err, user) {
+				if (err) {
+					console.log(err);
+					req.flash('errors', { msg: 'There was an error retrieving your user information from the database.' });
+					return res.redirect('/user/forgot-password');
+				}
+
+				if (!user) {
+					req.flash('errors', { msg: 'Your password reset token is invalid or it has expired.'});
+					return res.redirect('/user/forgot-password');
+				}
+
+				res.render('user/reset-password', { title: 'Reset Password' });
+			});
+	},
+	post: function(req, res, next) {
+		req.assert('password', 'Please enter a password of at least ' + minimumPasswordLength + ' characters.').len(minimumPasswordLength);
+		req.assert('confirmPassword', 'Your passwords must match.').equals(req.body.password);
+
+		var errors = req.validationErrors();
+
+		if (errors) {
+			req.flash('errors', errors);
+			return res.redirect('back');
+		}
+
+		User
+			.findOne({ passwordResetToken: req.params.passwordResetToken })
+			.where('passwordResetExpires').gt(moment())
+			.exec(function(err, user) {
+				if (err) {
+					console.log(err);
+					req.flash('errors', { msg: 'There was an error retrieving your user information from the database.' });
+					return res.redirect('back');
+				}
+
+				if (!user) {
+					req.flash('errors', { msg: 'Your password reset token is invalid or it has expired.'});
+					return res.redirect('/user/forgot-password');
+				}
+
+				user.password = req.body.password;
+				user.passwordResetToken = undefined;
+				user.passwordResetExpires = undefined;
+
+				user.save(function(err) {
+					if (err) {
+						console.log(err);
+						req.flash('errors', { msg: 'There was an error updating your password in the database.' });
+						return res.redirect('back');
+					}
+
+					req.flash('success', { msg: 'Your password has been successfully updated.  You may now log in with your new password.' });
+					res.redirect('/user/login');
+				});
+			});
 	}
 };
 

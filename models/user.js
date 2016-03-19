@@ -5,7 +5,9 @@ var userSchema = new mongoose.Schema({
 	email: { type: String, unique: true, required: true },
 	password: String,
 	verificationToken: { type: String, unique: true, required: true },
-	isVerified: { type: Boolean, required: true, default: false }
+	isVerified: { type: Boolean, required: true, default: false },
+	passwordResetToken: String,
+	passwordResetExpires: Date
 });
 
 // hash passwords
