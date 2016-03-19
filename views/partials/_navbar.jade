@@ -1,0 +1,24 @@
+ul#account-dropdown.dropdown-content
+	if !user
+		li
+			a(href="/user/login") Login
+		li
+			a(href="/user/register") Register
+		li
+			a(href="/user/forgot-password") Forgot Password
+	else
+		li
+			a(href="/user/change-password") Change Password
+		li
+			a(href="/user/logout") Logout
+
+nav.teal
+	.nav-wrapper
+		ul.right
+			li
+				a.dropdown-button(href="#!", data-activates="account-dropdown")
+					if !user
+						| Account
+					else
+						| #{user.email}
+					i.material-icons.right arrow_drop_down
