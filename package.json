@@ -17,6 +17,7 @@
     "express-flash": "0.0.2",
     "express-session": "^1.13.0",
     "express-validator": "^2.20.2",
+    "heroku-ssl-redirect": "0.0.3",
     "jade": "~1.11.0",
     "mongoose": "^4.4.8",
     "morgan": "~1.6.1",
