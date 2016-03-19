@@ -19,7 +19,7 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, function(email, passw
 		}
 
 		if (!user.isVerified) {
-			return done(null, false, { msg: 'Your email has not been verified.  You must verify your email address before you can log in.' });
+			return done(null, false, { msg: 'Your email has not been verified.  Check your inbox for a verification email.<p><a href="/user/verify-resend/' + email + '" class="btn waves-effect white black-text"><i class="material-icons left">email</i>Re-send verification email</a></p>' });
 		}
 
 		user.comparePassword(password, function(err, isMatch) {

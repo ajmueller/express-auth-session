@@ -92,7 +92,7 @@ exports.register = {
 					return res.redirect('/user/register');
 				}
 
-				utility.sendEmail(req.body.email, 'ajmueller6@gmail.com', 'Email Verification Required', '<p>Before you can log in, you must verify your email address:</p><a href="' + req.protocol + '://' + req.get('host') + '/user/verify/' + verificationToken + '">Verify your email address</a>', 'html', function(err, json) {
+				utility.sendEmail(req.body.email, 'ajmueller6@gmail.com', 'Email Verification Required', '<p>Before you can log in, you must verify your email address:</p><a href="' + utility.constructUrl(req, '/user/verify/' + verificationToken) + '">Verify your email address</a>', 'html', function(err, json) {
 					if (err) {
 						console.log(err);
 						req.flash('errors', { msg: 'There was an error sending your verification email.  Please try again.' });
@@ -121,7 +121,66 @@ exports.verify = {
 			}
 
 			req.flash('success', { msg: 'Your email address has been verified.  You may now log in.' });
-			res.redirect('/');
+			res.redirect('/user/login');
 		});
+	}
+};
+
+exports.verifyResend = {
+	resendEmail: function(req, res, email) {
+		var verificationToken = utility.createRandomToken(req.body.email);
+
+		User.findOneAndUpdate({ email: email }, { verificationToken: verificationToken }, function(err, user) {
+			if (err) {
+				console.log(err);
+				req.flash('errors', { msg: 'There was an error retrieving user information from the database.  Please try again.' });
+				return res.redirect('/user/verify-resend');
+			}
+
+			if (!user) {
+				req.flash('errors', { msg: 'No user with that email address exists.  Please try another email address.' });
+				return res.redirect('/user/verify-resend');
+			}
+
+			if (user.isVerified) {
+				req.flash('info', { msg: 'Your email address has already been verified.  Please log in.' });
+				return res.redirect('/user/login');
+			}
+
+			utility.sendEmail(email, 'ajmueller6@gmail.com', 'Email Verification Required', '<p>You have requested a new verification email.  Before you can log in, you must verify your email address:</p><a href="' + utility.constructUrl(req, '/user/verify/' + verificationToken) + '">Verify your email address</a>', 'html', function(err, json) {
+					if (err) {
+						console.log(err);
+						req.flash('errors', { msg: 'There was an error sending your verification email.  Please try again.' });
+						return res.redirect('/user/verify-resend');
+					}
+
+					req.flash('info', { msg: 'Check your inbox for the new verification email.'});
+					res.redirect('/user/login');
+				});
+		});
+	},
+	get: function(req, res) {
+		if (req.user) {
+			return res.redirect('/');
+		}
+
+		if (req.params.email) {
+			exports.verifyResend.resendEmail(req, res, req.params.email);
+		}
+		else {
+			res.render('user/verify-resend', { title: 'Re-Send Verification Email' });
+		}
+	},
+	post: function(req, res) {
+		req.assert('email', 'Please provide a valid email address.').isEmail();
+
+		var errors = req.validationErrors();
+
+		if (errors) {
+			req.flash('errors', errors);
+			return res.redirect('/user/login');
+		}
+
+		exports.verifyResend.resendEmail(req, res, req.body.email);
 	}
 };
