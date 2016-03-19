@@ -9,12 +9,15 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var validator = require('express-validator');
 var bodyParser = require('body-parser');
+var passport = require('passport');
 var mongoose = require('mongoose');
 var MongoStore = require('connect-mongo')(session);
 var config = require('./config');
 
 var routes = require('./routes/index');
 var user = require('./routes/user');
+
+var authentication = require('./authentication');
 
 var app = express();
 
@@ -42,8 +45,17 @@ app.use(session({
 	store: new MongoStore({ url: config.db.uri, autoReconnect: true })
 }));
 
+// passport needs to come after session initialization
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// pass the user object to all responses
+app.use(function(req, res, next) {
+	res.locals.user = req.user;
+	next();
+});
 
 app.use('/', routes);
 app.use('/user', user);

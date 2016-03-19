@@ -1,11 +1,62 @@
 var User = require('../models/user');
 var utility = require('../lib/utility');
+var passport = require('passport');
+
+exports.login = {
+	get: function(req, res) {
+		if (req.user) {
+			return res.redirect('/');
+		}
+
+		res.render('user/login', { title: 'User Login' });
+	},
+	post: function(req, res, next) {
+		req.assert('email', 'Please provide a valid email address.').isEmail();
+		req.assert('password', 'Password cannot be blank.').notEmpty();
+
+		var errors = req.validationErrors();
+
+		if (errors) {
+			req.flash('errors', errors);
+			return res.redirect('/user/login');
+		}
+
+		passport.authenticate('local', function(err, user, info) {
+			if (err) {
+				return next(err);
+			}
+
+			if (!user) {
+				req.flash('errors', info);
+				return res.redirect('/user/login');
+			}
+
+			req.logIn(user, function(err) {
+				if (err) {
+					return next(err);
+				}
+
+				req.flash('info', { msg: 'You have successfully logged in.' });
+				res.redirect('/');
+			});
+		})(req, res, next);
+	}
+};
+
+exports.logout = {
+	get: function(req, res) {
+		req.logout();
+		req.flash('info', { msg: 'You have been successfully logged out.' });
+		res.redirect('/');
+	}
+};
 
 exports.register = {
 	get: function(req, res) {
 		if (req.user) {
 			return res.redirect('/');
 		}
+
 		res.render('user/register', { title: 'Register User' });
 	},
 	post: function(req, res, next) {

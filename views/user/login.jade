@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+	.row
+		form(method="post", action="/user/login").col.s12
+			.row
+				.input-field.col.s12.m6
+					input(placeholder="test@example.com", type="email", name="email", id="email", class="validate", required)
+					label(for="email") Email
+				.input-field.col.s12.m6
+					input(placeholder="At least 8 characters", type="password", name="password", id="password", class="validate", required)
+					label(for="password") Password
+			.row
+				.input-field.col.s12
+					button.btn.waves-effect.waves-light Submit
+					a.btn-flat.waves-effect.waves-light(href="/") Cancel
