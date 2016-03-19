@@ -5,6 +5,44 @@ var moment = require('moment');
 var minimumPasswordLength = 8;
 var passwordResetTimeLimitInHours = 1;
 
+exports.changePassword = {
+	get: function(req, res) {
+		res.render('user/change-password', { title: 'Change Password' });
+	},
+	post: function(req, res, next) {
+		req.assert('password', 'Please enter a password of at least ' + minimumPasswordLength + ' characters.').len(minimumPasswordLength);
+		req.assert('confirmPassword', 'Your passwords must match.').equals(req.body.password);
+
+		var errors = req.validationErrors();
+
+		if (errors) {
+			req.flash('errors', errors);
+			return res.redirect('back');
+		}
+
+		User.findOne({ email: req.user.email }, function(err, user) {
+			if (err) {
+				console.log(err);
+				req.flash('errors', { msg: 'There was an error retrieving your user data from the database.  Please try again.' });
+				return res.redirect('back');
+			}
+
+			user.password = req.body.password;
+
+			user.save(function(err) {
+				if (err) {
+					console.log(err);
+					req.flash('errors', { msg: 'There was an error updating your password in the database.  Please try again.' });
+					return res.redirect('back');
+				}
+
+				req.flash('success', { msg: 'Your password has been successfully updated.' });
+				res.redirect('/');
+			});
+		});
+	}
+};
+
 exports.forgotPassword = {
 	get: function(req, res) {
 		if (req.isAuthenticated()) {
