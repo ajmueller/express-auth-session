@@ -46,7 +46,7 @@ exports.login = {
 exports.logout = {
 	get: function(req, res) {
 		req.logout();
-		req.flash('info', { msg: 'You have been successfully logged out.' });
+		req.flash('info', { msg: 'You have successfully logged out.' });
 		res.redirect('/');
 	}
 };
