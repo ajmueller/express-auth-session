@@ -2,14 +2,14 @@ if messages.errors
 	each error in messages.errors
 		.card-panel.red.darken-2.white-text
 			i.material-icons.left error_outline
-			| #{error.msg}
+			| !{error.msg}
 if messages.info
 	each info in messages.info
 		.card-panel.blue.darken-2.white-text
 			i.material-icons.left info_outline
-			| #{info.msg}
+			| !{info.msg}
 if messages.success
 	each success in messages.success
 		.card-panel.green.darken-2.white-text
 			i.material-icons.left done
-			| #{success.msg}
+			| !{success.msg}
