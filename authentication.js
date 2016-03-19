@@ -27,7 +27,7 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, function(email, passw
 				return done(null, user);
 			}
 			else {
-				return done(null, false, { msg: 'Invalid email or password.' });
+				return done(null, false, { msg: 'Invalid password.  Please try again.' });
 			}
 		});
 	});
