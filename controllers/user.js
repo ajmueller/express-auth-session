@@ -119,7 +119,6 @@ exports.login = {
 					return next(err);
 				}
 
-				req.flash('info', { msg: 'You have successfully logged in.' });
 				res.redirect('/');
 			});
 		})(req, res, next);
