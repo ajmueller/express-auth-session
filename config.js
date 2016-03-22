@@ -5,6 +5,10 @@ module.exports = {
 	email: {
 		apiKey: process.env.SENDGRID_API_KEY
 	},
+	login: {
+		maxAttempts: process.env.MAX_LOGIN_ATTEMPTS,
+		lockoutHours: process.env.LOGIN_ATTEMPS_LOCKOUT_HOURS * 60 * 60 * 1000
+	},
 	server: {
 		timezone: process.env.TZ
 	},

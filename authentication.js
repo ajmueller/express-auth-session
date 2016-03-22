@@ -1,6 +1,8 @@
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('./models/user');
+var moment = require('moment-timezone');
+var config = require('./config');
 
 passport.serializeUser(function(user, done) {
 	done(null, user.id);
@@ -18,6 +20,16 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, function(email, passw
 			return done(null, false, { msg: 'No user with the email ' + email + ' was found.' });
 		}
 
+		if (user.isLocked) {
+			return user.incrementLoginAttempts(function(err) {
+				if (err) {
+					return done(err);
+				}
+
+				return done(null, false, { msg: 'You have exceeded the maximum number of login attempts.  Your account is locked until ' + moment(user.lockUntil).tz(config.server.timezone).format('LT z') + '.  You may attempt to log in again after that time.' });
+			});
+		}
+
 		if (!user.isVerified) {
 			return done(null, false, { msg: 'Your email has not been verified.  Check your inbox for a verification email.<p><a href="/user/verify-resend/' + email + '" class="btn waves-effect white black-text"><i class="material-icons left">email</i>Re-send verification email</a></p>' });
 		}
@@ -27,7 +39,13 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, function(email, passw
 				return done(null, user);
 			}
 			else {
-				return done(null, false, { msg: 'Invalid password.  Please try again.' });
+				user.incrementLoginAttempts(function(err) {
+					if (err) {
+						return done(err);
+					}
+
+					return done(null, false, { msg: 'Invalid password.  Please try again.' });
+				});
 			}
 		});
 	});
