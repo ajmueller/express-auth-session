@@ -1,7 +1,8 @@
 var User = require('../models/user');
 var utility = require('../lib/utility');
 var passport = require('passport');
-var moment = require('moment');
+var moment = require('moment-timezone');
+var config = require('../config');
 var minimumPasswordLength = 8;
 var passwordResetTimeLimitInHours = 1;
 
@@ -62,7 +63,7 @@ exports.forgotPassword = {
 		}
 
 		var passwordResetToken = utility.createRandomToken(req.body.email);
-		var passwordResetExpires = moment().add(passwordResetTimeLimitInHours, 'hours');
+		var passwordResetExpires = moment().add(passwordResetTimeLimitInHours, 'hours').tz(config.server.timezone);
 
 		User.findOneAndUpdate({ email: req.body.email }, { passwordResetToken: passwordResetToken, passwordResetExpires: passwordResetExpires }, function(err, user) {
 			if (err) {
@@ -71,7 +72,7 @@ exports.forgotPassword = {
 				return res.redirect('/user/forgot-password');
 			}
 
-			utility.sendEmail(req.body.email, 'ajmueller6@gmail.com', 'Password Reset Requested', '<p>You are receiving this email because you requested a password reset.  You have until ' + passwordResetExpires.format('LT') + ' to reset your password.  You may ignore this email and your password will remain unchanged.</p><a href="' + utility.constructUrl(req, '/user/reset-password/' + passwordResetToken) + '">Reset your password</a>', 'html', function(err, json) {
+			utility.sendEmail(req.body.email, 'ajmueller6@gmail.com', 'Password Reset Requested', '<p>You are receiving this email because you requested a password reset.  You have until ' + passwordResetExpires.format('LT z') + ' to reset your password.  You may ignore this email and your password will remain unchanged.</p><a href="' + utility.constructUrl(req, '/user/reset-password/' + passwordResetToken) + '">Reset your password</a>', 'html', function(err, json) {
 					if (err) {
 						console.log(err);
 						req.flash('errors', { msg: 'There was an error sending your password reset email.  Please try again.' });
@@ -197,7 +198,7 @@ exports.resetPassword = {
 
 		User
 			.findOne({ passwordResetToken: req.params.passwordResetToken })
-			.where('passwordResetExpires').gt(moment())
+			.where('passwordResetExpires').gt(moment().tz(config.server.timezone))
 			.exec(function(err, user) {
 				if (err) {
 					console.log(err);
@@ -226,7 +227,7 @@ exports.resetPassword = {
 
 		User
 			.findOne({ passwordResetToken: req.params.passwordResetToken })
-			.where('passwordResetExpires').gt(moment())
+			.where('passwordResetExpires').gt(moment().tz(config.server.timezone))
 			.exec(function(err, user) {
 				if (err) {
 					console.log(err);
