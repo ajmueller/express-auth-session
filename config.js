@@ -7,7 +7,7 @@ module.exports = {
 	},
 	login: {
 		maxAttempts: process.env.MAX_LOGIN_ATTEMPTS,
-		lockoutHours: process.env.LOGIN_ATTEMPS_LOCKOUT_HOURS * 60 * 60 * 1000
+		lockoutHours: process.env.LOGIN_ATTEMPTS_LOCKOUT_HOURS * 60 * 60 * 1000
 	},
 	server: {
 		timezone: process.env.TZ
