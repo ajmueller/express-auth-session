@@ -1,6 +1,7 @@
 module.exports = {
 	db: {
-		uri: process.env.MONGOLAB_URI
+		uri: process.env.MONGOLAB_URI,
+		aclCollectionPrefix: process.env.ACL_COLLECTION_PREFIX
 	},
 	email: {
 		apiKey: process.env.SENDGRID_API_KEY

@@ -10,7 +10,8 @@ var userSchema = new mongoose.Schema({
 	passwordResetToken: String,
 	passwordResetExpires: Date,
 	loginAttempts: { type: Number, required: true, default: 0 },
-	lockUntil: Date
+	lockUntil: Date,
+	role: String
 });
 
 userSchema.virtual('isLocked').get(function() {

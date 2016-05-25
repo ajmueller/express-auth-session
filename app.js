@@ -19,12 +19,16 @@ var routes = require('./routes/index');
 var user = require('./routes/user');
 
 var authentication = require('./authentication');
+var authorization = require('./authorization');
 
 var app = express();
 
 app.use(sslRedirect());
 
 mongoose.connect(config.db.uri);
+mongoose.connection.on('connected', function(test) {
+	authorization.init();
+});
 mongoose.connection.on('error', function() {
 	console.log('There is an issue with your MongoDB connection.  Please make sure MongoDB is running.');
 	process.exit(1);
