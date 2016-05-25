@@ -58,8 +58,6 @@ userSchema.methods.comparePassword = function(passwordToCompare, callback) {
 userSchema.methods.incrementLoginAttempts = function(callback) {
 	var lockExpired = !!(this.lockUntil && this.lockUntil < Date.now());
 
-	console.log('Lock expired: ' + lockExpired);
-
 	if (lockExpired) {
 		return this.update({
 			$set: { loginAttempts: 1 },
