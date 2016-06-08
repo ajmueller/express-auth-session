@@ -6,8 +6,8 @@ module.exports = {
 	init: function() {
 		var aclInstance = module.exports.getAcl();
 
-		aclInstance.addRoleParents('user', ['admin', 'superAdmin']);
-		aclInstance.addRoleParents('admin', ['superAdmin']);
+		aclInstance.addRoleParents('superAdmin', 'admin');
+		aclInstance.addRoleParents('admin', 'user');
 
 		aclInstance.allow([
 			{
