@@ -4,9 +4,15 @@ block content
 	.row
 		form(method="post").col.s12
 			.row
-				.input-field.col.s12
-					input(placeholder="test@example.com", type="email", name="email", id="email", class="validate", required, autofocus)
+				.input-field.col.s12.m6
+					input(placeholder="test@example.com", type="email", name="email", id="email", class="validate", required)
 					label(for="email") Email
+				.input-field.col.s12.m6
+					select(name="role", id="role", required)
+						option(value="user") User
+						option(value="admin") Admin
+						option(value="superAdmin") Super Admin
+					label(for="role") Role
 			.row
 				.input-field.col.s12.m6
 					input(placeholder="At least 8 characters", type="password", name="password", id="password", class="validate", required)

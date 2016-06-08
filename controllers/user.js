@@ -86,6 +86,16 @@ exports.forgotPassword = {
 	}
 };
 
+exports.getUserId = function(req, res) {
+	return req.user.id;
+};
+
+exports.list = {
+	get: function(req, res, next) {
+		res.render('user/list', { title: 'User List' });
+	}
+};
+
 exports.login = {
 	get: function(req, res) {
 		if (req.isAuthenticated()) {
@@ -159,8 +169,11 @@ exports.register = {
 			email: req.body.email,
 			password: req.body.password,
 			verificationToken: verificationToken,
+			role: req.body.role,
 			isVerified: false
 		});
+
+		var acl = require('../authorization').getAcl();
 
 		User.findOne({ email: req.body.email }, function(err, existingUser) {
 			if (existingUser) {
@@ -168,22 +181,30 @@ exports.register = {
 				return res.redirect('/user/register');
 			}
 
-			user.save(function(err) {
+			user.save(function(err, newUser) {
 				if (err) {
 					console.log(err);
 					req.flash('errors', { msg: 'There was an error creating the user in the database.  Please try again.' });
 					return res.redirect('/user/register');
 				}
 
-				utility.sendEmail(req.body.email, 'ajmueller6@gmail.com', 'Email Verification Required', '<p>Before you can log in, you must verify your email address:</p><a href="' + utility.constructUrl(req, '/user/verify/' + verificationToken) + '">Verify your email address</a>', 'html', function(err, json) {
+				acl.addUserRoles(newUser._id.toString(), req.body.role, function(err) {
 					if (err) {
 						console.log(err);
-						req.flash('errors', { msg: 'There was an error sending your verification email.  Please try again.' });
+						req.flash('errors', { msg: 'There was an error setting your roles in the database.  Please contact an administrator.' });
 						return res.redirect('/');
 					}
 
-					req.flash('info', { msg: 'Your account has been created, but you must verify your email before logging in.'});
-					res.redirect('/');
+					utility.sendEmail(req.body.email, 'ajmueller6@gmail.com', 'Email Verification Required', '<p>Before you can log in, you must verify your email address:</p><a href="' + utility.constructUrl(req, '/user/verify/' + verificationToken) + '">Verify your email address</a>', 'html', function(err, json) {
+						if (err) {
+							console.log(err);
+							req.flash('errors', { msg: 'There was an error sending your verification email.  Please contact an administrator.' });
+							return res.redirect('/');
+						}
+
+						req.flash('info', { msg: 'Your account has been created, but you must verify your email before logging in.'});
+						res.redirect('/');
+					});
 				});
 			});
 		});
