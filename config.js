@@ -1,6 +1,6 @@
 module.exports = {
 	db: {
-		uri: process.env.MONGOLAB_URI,
+		uri: process.env.MONGODB_URI,
 		aclCollectionPrefix: process.env.ACL_COLLECTION_PREFIX
 	},
 	email: {
