@@ -16,10 +16,10 @@ router.get('/forgot-password', userController.forgotPassword.get);
 router.post('/forgot-password', userController.forgotPassword.post);
 router.get('/reset-password/:passwordResetToken', userController.resetPassword.get);
 router.post('/reset-password/:passwordResetToken', userController.resetPassword.post);
-router.get('/list', acl.middleware(2, userController.getUserId), userController.list.get);
 
 // protected URLs
 router.get('/change-password', authentication.isAuthenticated, userController.changePassword.get);
 router.post('/change-password', authentication.isAuthenticated, userController.changePassword.post);
+router.get('/list', acl.middleware(2, userController.getUserId), userController.list.get);
 
 module.exports = router;
