@@ -15,9 +15,6 @@ var mongoose = require('mongoose');
 var MongoStore = require('connect-mongo')(session);
 var config = require('./config');
 
-var routes = require('./routes/index');
-var user = require('./routes/user');
-
 var authentication = require('./authentication');
 var authorization = require('./authorization');
 
@@ -63,6 +60,9 @@ app.use(function(req, res, next) {
 	res.locals.user = req.user;
 	next();
 });
+
+var routes = require('./routes/index');
+var user = require('./routes/user');
 
 app.use('/', routes);
 app.use('/user', user);
