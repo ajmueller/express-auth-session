@@ -1,6 +1,7 @@
 extends layout
 
 block content
-	h1= message
-	h2= error.status
+	.card-panel.red.darken-2.white-text
+		i.material-icons.left error_outline
+		| #{message}
 	pre #{error.stack}
