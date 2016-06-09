@@ -3,15 +3,13 @@ var utility = require('../lib/utility');
 var passport = require('passport');
 var moment = require('moment-timezone');
 var config = require('../config');
-var minimumPasswordLength = 8;
-var passwordResetTimeLimitInHours = 1;
 
 exports.changePassword = {
 	get: function(req, res) {
 		res.render('user/change-password', { title: 'Change Password' });
 	},
 	post: function(req, res, next) {
-		req.assert('password', 'Please enter a password of at least ' + minimumPasswordLength + ' characters.').len(minimumPasswordLength);
+		req.assert('password', 'Please enter a password of at least ' + config.login.minimumPasswordLength + ' characters.').len(config.login.minimumPasswordLength);
 		req.assert('confirmPassword', 'Your passwords must match.').equals(req.body.password);
 
 		var errors = req.validationErrors();
@@ -63,7 +61,7 @@ exports.forgotPassword = {
 		}
 
 		var passwordResetToken = utility.createRandomToken(req.body.email);
-		var passwordResetExpires = moment().add(passwordResetTimeLimitInHours, 'hours').tz(config.server.timezone);
+		var passwordResetExpires = moment().add(config.login.passwordResetTimeLimitInHours, 'hours').tz(config.server.timezone);
 
 		User.findOneAndUpdate({ email: req.body.email }, { passwordResetToken: passwordResetToken, passwordResetExpires: passwordResetExpires }, function(err, user) {
 			if (err) {
@@ -154,7 +152,7 @@ exports.register = {
 	},
 	post: function(req, res, next) {
 		req.assert('email', 'Please provide a valid email address.').isEmail();
-		req.assert('password', 'Please enter a password of at least ' + minimumPasswordLength + ' characters.').len(minimumPasswordLength);
+		req.assert('password', 'Please enter a password of at least ' + config.login.minimumPasswordLength + ' characters.').len(config.login.minimumPasswordLength);
 		req.assert('confirmPassword', 'Your passwords must match.').equals(req.body.password);
 
 		var errors = req.validationErrors();
@@ -236,7 +234,7 @@ exports.resetPassword = {
 			});
 	},
 	post: function(req, res, next) {
-		req.assert('password', 'Please enter a password of at least ' + minimumPasswordLength + ' characters.').len(minimumPasswordLength);
+		req.assert('password', 'Please enter a password of at least ' + config.login.minimumPasswordLength + ' characters.').len(config.login.minimumPasswordLength);
 		req.assert('confirmPassword', 'Your passwords must match.').equals(req.body.password);
 
 		var errors = req.validationErrors();
