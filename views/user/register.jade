@@ -15,7 +15,7 @@ block content
 					label(for="role") Role
 			.row
 				.input-field.col.s12.m6
-					input(placeholder="At least 8 characters", type="password", name="password", id="password", class="validate", required)
+					input(placeholder="At least #{minimumPasswordLength} characters", type="password", name="password", id="password", class="validate", required)
 					label(for="password") Password
 				.input-field.col.s12.m6
 					input(type="password", name="confirmPassword", id="confirmPassword", class="validate", required)

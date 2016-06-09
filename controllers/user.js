@@ -6,7 +6,7 @@ var config = require('../config');
 
 exports.changePassword = {
 	get: function(req, res) {
-		res.render('user/change-password', { title: 'Change Password' });
+		res.render('user/change-password', { title: 'Change Password', minimumPasswordLength: config.login.minimumPasswordLength });
 	},
 	post: function(req, res, next) {
 		req.assert('password', 'Please enter a password of at least ' + config.login.minimumPasswordLength + ' characters.').len(config.login.minimumPasswordLength);
@@ -148,7 +148,7 @@ exports.register = {
 			return res.redirect('/');
 		}
 
-		res.render('user/register', { title: 'Register User' });
+		res.render('user/register', { title: 'Register User', minimumPasswordLength: config.login.minimumPasswordLength });
 	},
 	post: function(req, res, next) {
 		req.assert('email', 'Please provide a valid email address.').isEmail();
@@ -230,7 +230,7 @@ exports.resetPassword = {
 					return res.redirect('/user/forgot-password');
 				}
 
-				res.render('user/reset-password', { title: 'Reset Password' });
+				res.render('user/reset-password', { title: 'Reset Password', minimumPasswordLength: config.login.minimumPasswordLength });
 			});
 	},
 	post: function(req, res, next) {
