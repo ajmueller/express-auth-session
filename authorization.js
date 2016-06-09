@@ -18,6 +18,15 @@ module.exports = {
 						permissions: 'get'
 					}
 				]
+			},
+			{
+				roles: ['superAdmin'],
+				allows: [
+					{
+						resources: '/admin/list',
+						permissions: 'get'
+					}
+				]
 			}
 		]);
 	},

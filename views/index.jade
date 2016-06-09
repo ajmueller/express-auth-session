@@ -12,14 +12,18 @@ block content
 		else
 			h3 Test Links
 			p Test the below links to see if you have access to these resources, given your role of "#{user.role}."
-			h4 Admins and Super Admins
-			ul
-				li
-					a(href="/user/list") List Users
 			h4 All Users
 			ul
 				li
 					a(href="/user/change-password") Change Password
+			h4 Admins and Super Admins
+			ul
+				li
+					a(href="/user/list") List Users
+			h4 Super Admins
+			ul
+				li
+					a(href="/admin/list") List Admins
 			a.btn.waves-effect.waves-light(href="/user/logout")
 				i.material-icons.left input
 				| Logout
