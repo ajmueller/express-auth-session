@@ -4,7 +4,8 @@ module.exports = {
 		aclCollectionPrefix: process.env.ACL_COLLECTION_PREFIX
 	},
 	email: {
-		apiKey: process.env.SENDGRID_API_KEY
+		apiKey: process.env.SENDGRID_API_KEY,
+		sendFrom: process.env.SEND_EMAILS_FROM
 	},
 	login: {
 		maxAttempts: process.env.MAX_LOGIN_ATTEMPTS,

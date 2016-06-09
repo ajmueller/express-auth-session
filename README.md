@@ -32,6 +32,7 @@ The below environment variables are needed to get the application up and running
 
 * `MONGODB_URI` - this only needs to be added manually if you are A) working locally or B) using your own mLab instance that you didn't provision through Heroku.
 * `SENDGRID_API_KEY` - the API key you just created for your SendGrid account.
+* `SEND_EMAILS_FROM` - the email address from which you will send notification emails.
 * `SESSION_SECRET` - the secret key used to encode session data.
 * `ACL_COLLECTION_PREFIX` - the prefix for the ACL data collection in the Mongo database.
 * `MAX_LOGIN_ATTEMPTS` - the maximum number of login attempts a user can perform before being locked out.
