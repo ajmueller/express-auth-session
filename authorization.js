@@ -2,14 +2,14 @@ var acl = require('acl');
 var mongoose = require('mongoose');
 var config = require('./config');
 
+acl = new acl(new acl.mongodbBackend(mongoose.connection.db, config.db.aclCollectionPrefix), { debug: function(string) { console.log(string); } });
+
 module.exports = {
 	init: function() {
-		var aclInstance = module.exports.getAcl();
+		acl.addRoleParents('superAdmin', 'admin');
+		acl.addRoleParents('admin', 'user');
 
-		aclInstance.addRoleParents('superAdmin', 'admin');
-		aclInstance.addRoleParents('admin', 'user');
-
-		aclInstance.allow([
+		acl.allow([
 			{
 				roles: ['admin'],
 				allows: [
@@ -32,6 +32,6 @@ module.exports = {
 	},
 
 	getAcl: function() {
-		return new acl(new acl.mongodbBackend(mongoose.connection.db, config.db.aclCollectionPrefix), { debug: function(string) { console.log(string); } });
+		return acl;
 	}
 };
