@@ -297,10 +297,10 @@ exports.verify = {
 };
 
 exports.verifyResend = {
-	resendEmail: function(req, res, email) {
-		var verificationToken = utility.createRandomToken(req.body.email);
+	resendEmail: function(req, res, emailAddress) {
+		var verificationToken = utility.createRandomToken(emailAddress);
 
-		User.findOneAndUpdate({ email: email }, { verificationToken: verificationToken }, function(err, user) {
+		User.findOneAndUpdate({ email: emailAddress }, { verificationToken: verificationToken }, function(err, user) {
 			if (err) {
 				console.log(err);
 				req.flash('errors', { msg: 'There was an error retrieving user information from the database.  Please try again.' });
@@ -317,7 +317,7 @@ exports.verifyResend = {
 				return res.redirect('/user/login');
 			}
 
-			utility.sendEmail(email, config.email.sendFrom, 'Email Verification Required', '<p>You have requested a new verification email.  Before you can log in, you must verify your email address:</p><a href="' + utility.constructUrl(req, '/user/verify/' + verificationToken) + '">Verify your email address</a>', 'html', function(err, json) {
+			utility.sendEmail(emailAddress, config.email.sendFrom, 'Email Verification Required', '<p>You have requested a new verification email.  Before you can log in, you must verify your email address:</p><a href="' + utility.constructUrl(req, '/user/verify/' + verificationToken) + '">Verify your email address</a>', 'html', function(err, json) {
 					if (err) {
 						console.log(err);
 						req.flash('errors', { msg: 'There was an error sending your verification email.  Please try again.' });
