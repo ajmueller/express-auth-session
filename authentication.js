@@ -56,5 +56,6 @@ exports.isAuthenticated = function(req, res, next) {
 		return next();
 	}
 
-	res.redirect('/login');
+	req.flash('info', { msg: "You must be logged in to visit that page." });
+	res.redirect('/user/login');
 };
