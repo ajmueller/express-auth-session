@@ -85,7 +85,11 @@ exports.forgotPassword = {
 };
 
 exports.getUserId = function(req, res) {
-	return req.user.id;
+	if (typeof req.user !== 'undefined') {
+		return req.user.id;
+	}
+
+	return false;
 };
 
 exports.list = {
