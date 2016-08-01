@@ -10,7 +10,7 @@ This application has been designed to use the free tiers of these services to ge
 
 ## Heroku Setup
 
-* Fork this project to your own Github account.
+* Fork this project to your own GitHub account.
 * Sign up for or log into a Heroku account and create a new app.
 * On your app, change the Deployment Method on the Deploy tab to "GitHub."
 * Search for your forked project and connect your repository.
