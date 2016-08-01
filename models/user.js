@@ -7,7 +7,7 @@ var userSchema = new mongoose.Schema({
 	password: String,
 	verificationToken: { type: String, unique: true, required: true },
 	isVerified: { type: Boolean, required: true, default: false },
-	passwordResetToken: String,
+	passwordResetToken: { type: String, unique: true },
 	passwordResetExpires: Date,
 	loginAttempts: { type: Number, required: true, default: 0 },
 	lockUntil: Date,
