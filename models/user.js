@@ -4,7 +4,7 @@ var config = require('../config');
 
 var userSchema = new mongoose.Schema({
 	email: { type: String, unique: true, required: true },
-	password: String,
+	password: { type: String, required: true },
 	verificationToken: { type: String, unique: true, required: true },
 	isVerified: { type: Boolean, required: true, default: false },
 	passwordResetToken: { type: String, unique: true },
