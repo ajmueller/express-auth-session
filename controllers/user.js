@@ -60,7 +60,7 @@ exports.forgotPassword = {
 			return res.redirect('/user/forgot-password');
 		}
 
-		var passwordResetToken = utility.createRandomToken(req.body.email);
+		var passwordResetToken = utility.createRandomToken();
 		var passwordResetExpires = moment().add(config.login.passwordResetTimeLimitInHours, 'hours').tz(config.server.timezone);
 
 		User.findOneAndUpdate({ email: req.body.email }, { passwordResetToken: passwordResetToken, passwordResetExpires: passwordResetExpires }, function(err, user) {
@@ -166,7 +166,7 @@ exports.register = {
 			return res.redirect('/user/register');
 		}
 
-		var verificationToken = utility.createRandomToken(req.body.email);
+		var verificationToken = utility.createRandomToken();
 		var user = new User({
 			email: req.body.email,
 			password: req.body.password,
@@ -302,7 +302,7 @@ exports.verify = {
 
 exports.verifyResend = {
 	resendEmail: function(req, res, emailAddress) {
-		var verificationToken = utility.createRandomToken(emailAddress);
+		var verificationToken = utility.createRandomToken();
 
 		User.findOneAndUpdate({ email: emailAddress }, { verificationToken: verificationToken }, function(err, user) {
 			if (err) {
