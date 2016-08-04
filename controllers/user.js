@@ -84,14 +84,6 @@ exports.forgotPassword = {
 	}
 };
 
-exports.getUserId = function(req, res) {
-	if (typeof req.user !== 'undefined') {
-		return req.user.id;
-	}
-
-	return false;
-};
-
 exports.list = {
 	get: function(req, res, next) {
 		res.render('user/list', { title: 'User List' });

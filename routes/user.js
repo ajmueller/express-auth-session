@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var userController = require('../controllers/user');
+var utility = require('../lib/utility');
 var authentication = require('../authentication');
 var acl = require('../authorization').getAcl();
 
@@ -20,6 +21,6 @@ router.post('/reset-password/:passwordResetToken', userController.resetPassword.
 router.get('/change-password', authentication.isAuthenticated, userController.changePassword.get);
 router.post('/change-password', authentication.isAuthenticated, userController.changePassword.post);
 router.get('/logout', authentication.isAuthenticated, userController.logout.get);
-router.get('/list', acl.middleware(2, userController.getUserId), userController.list.get);
+router.get('/list', acl.middleware(2, utility.getUserId), userController.list.get);
 
 module.exports = router;
