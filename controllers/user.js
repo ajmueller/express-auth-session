@@ -258,6 +258,8 @@ exports.resetPassword = {
 				user.password = req.body.password;
 				user.passwordResetToken = undefined;
 				user.passwordResetExpires = undefined;
+				user.loginAttempts = 0;
+				user.lockUntil = undefined;
 
 				user.save(function(err) {
 					if (err) {
