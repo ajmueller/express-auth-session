@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
+var async = require('async');
 var config = require('../config');
 
 var userSchema = new mongoose.Schema({
@@ -26,7 +27,7 @@ userSchema.pre('save', function(next) {
 		return next();
 	}
 
-	bcrypt.genSalt(10, function(err, salt) {
+	bcrypt.genSalt(config.login.passwordHashRounds, function(err, salt) {
 		if (err) {
 			console.log(err);
 			req.flash('errors', { msg: 'There was an error generating your password salt.' });
@@ -47,7 +48,35 @@ userSchema.pre('save', function(next) {
 });
 
 userSchema.methods.comparePassword = function(passwordToCompare, callback) {
-	bcrypt.compare(passwordToCompare, this.password, function(err, isMatch) {
+	var user = this;
+
+	async.waterfall([
+		function(waterfallCb) {
+			bcrypt.compare(passwordToCompare, user.password, function(err, isMatch) {
+				if (err) {
+					return waterfallCb(err);
+				}
+
+				waterfallCb(null, isMatch);
+			});
+		},
+		function(isMatch, waterfallCb) {
+			if (bcrypt.getRounds(user.password) !== config.login.passwordHashRounds) {
+				user.password = passwordToCompare;
+
+				user.save(function(err, user) {
+					if (err) {
+						return waterfallCb(err, isMatch);
+					}
+
+					waterfallCb(null, isMatch);
+				});
+			}
+			else {
+				waterfallCb(null, isMatch);
+			}
+		}
+	], function(err, isMatch) {
 		if (err) {
 			return callback(err);
 		}

@@ -38,6 +38,7 @@ The below environment variables are needed to get the application up and running
 * `MAX_LOGIN_ATTEMPTS` - the maximum number of login attempts a user can perform before being locked out.
 * `LOGIN_ATTEMPTS_LOCKOUT_HOURS` - the amount of time, in hours, that a user is locked out of their account due to exceeding the maximum number of login attempts.
 * `MINIMUM_PASSWORD_LENGTH` - the minimum length of user passwords.
+* `PASSWORD_HASH_ROUNDS` - the number of rounds for bcrypt to apply its hashing algorithm.  The higher the rounds, the more secure the password is, but the more computing power is needed to hash passwords.  [Choose a number that best balances security and performance](http://security.stackexchange.com/questions/3959/recommended-of-iterations-when-using-pkbdf2-sha256/3993#3993).
 * `PASSWORD_RESET_TIME_LIMIT_IN_HOURS` - the amount of time a user has to reset their password if they go through the "Forgot Password" process.
 * `TZ` - the timezone of the server.  This is used to calculate times that are sent to users in emails regarding login activity.  Use [this list on Wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for reference using the TZ column.
 

@@ -11,7 +11,8 @@ module.exports = {
 		maxAttempts: process.env.MAX_LOGIN_ATTEMPTS,
 		lockoutHours: process.env.LOGIN_ATTEMPTS_LOCKOUT_HOURS * 60 * 60 * 1000,
 		minimumPasswordLength: process.env.MINIMUM_PASSWORD_LENGTH,
-		passwordResetTimeLimitInHours: process.env.PASSWORD_RESET_TIME_LIMIT_IN_HOURS
+		passwordResetTimeLimitInHours: process.env.PASSWORD_RESET_TIME_LIMIT_IN_HOURS,
+		passwordHashRounds: parseInt(process.env.PASSWORD_HASH_ROUNDS, 10)
 	},
 	server: {
 		timezone: process.env.TZ
