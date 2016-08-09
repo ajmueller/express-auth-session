@@ -20,6 +20,7 @@
     "express-flash": "0.0.2",
     "express-session": "^1.13.0",
     "express-validator": "^2.20.2",
+    "helmet": "^2.1.2",
     "heroku-ssl-redirect": "0.0.3",
     "jade": "~1.11.0",
     "moment-timezone": "^0.5.2",

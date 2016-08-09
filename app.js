@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 var express = require('express');
+var helmet = require('helmet');
 var sslRedirect = require('heroku-ssl-redirect');
 var flash = require('express-flash');
 var path = require('path');
@@ -21,6 +22,7 @@ var authentication = require('./authentication');
 var app = express();
 
 app.use(sslRedirect());
+app.use(helmet());
 
 mongoose.connect(config.db.uri);
 mongoose.connection.on('connected', function(test) {
