@@ -16,7 +16,7 @@
     "csurf": "^1.9.0",
     "debug": "~2.2.0",
     "dotenv": "^2.0.0",
-    "express": "~4.13.1",
+    "express": "^4.14.0",
     "express-flash": "0.0.2",
     "express-session": "^1.13.0",
     "express-validator": "^2.20.2",
