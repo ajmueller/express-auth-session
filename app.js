@@ -46,10 +46,15 @@ app.use(validator());
 app.use(cookieParser());
 app.use(session({
 	name: config.session.name,
-	resave: true,
-	saveUninitialized: true,
+	resave: false,
+	saveUninitialized: false,
 	secret: config.session.secret,
-	store: new MongoStore({ url: config.db.uri, autoReconnect: true })
+	store: new MongoStore({ url: config.db.uri, autoReconnect: true }),
+	cookie: {
+		httpOnly: true,
+		maxAge: 1000 * 60 * 60,
+		secure: 'auto'
+	}
 }));
 
 // csrf protection MUST be defined after cookieParser and session middleware
@@ -94,6 +99,10 @@ if (app.get('env') === 'development') {
 			error: err
 		});
 	});
+}
+
+if (app.get('env') === 'production') {
+	app.set('trust proxy', 1);
 }
 
 // production error handler
