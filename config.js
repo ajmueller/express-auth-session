@@ -18,6 +18,7 @@ module.exports = {
 		timezone: process.env.TZ
 	},
 	session: {
+		name: process.env.SESSION_NAME,
 		secret: process.env.SESSION_SECRET
 	}
 };
