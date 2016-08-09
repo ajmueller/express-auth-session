@@ -288,6 +288,11 @@ exports.verify = {
 				return res.redirect('/');
 			}
 
+			if (!user) {
+				req.flash('errors', { msg: 'Your verification token is invalid.  Please enter your email address below to receive a new verification token.' });
+				return res.redirect('/user/verify-resend');
+			}
+
 			req.flash('success', { msg: 'Your email address has been verified.  You may now log in.' });
 			res.redirect('/user/login');
 		});
