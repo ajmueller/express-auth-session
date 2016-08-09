@@ -7,6 +7,7 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var csrf = require('csurf');
 var session = require('express-session');
 var validator = require('express-validator');
 var bodyParser = require('body-parser');
@@ -47,6 +48,9 @@ app.use(session({
 	secret: config.session.secret,
 	store: new MongoStore({ url: config.db.uri, autoReconnect: true })
 }));
+
+// csrf protection MUST be defined after cookieParser and session middleware
+app.use(csrf({ cookie: true }));
 
 // passport needs to come after session initialization
 app.use(passport.initialize());

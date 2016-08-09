@@ -6,7 +6,7 @@ var config = require('../config');
 
 exports.changePassword = {
 	get: function(req, res) {
-		res.render('user/change-password', { title: 'Change Password', minimumPasswordLength: config.login.minimumPasswordLength });
+		res.render('user/change-password', { title: 'Change Password', minimumPasswordLength: config.login.minimumPasswordLength, csrf: req.csrfToken() });
 	},
 	post: function(req, res, next) {
 		req.assert('password', 'Please enter a password of at least ' + config.login.minimumPasswordLength + ' characters.').len(config.login.minimumPasswordLength);
@@ -48,7 +48,7 @@ exports.forgotPassword = {
 			return res.redirect('/');
 		}
 
-		res.render('user/forgot-password', { title: 'Forgot Password' });
+		res.render('user/forgot-password', { title: 'Forgot Password', csrf: req.csrfToken() });
 	},
 	post: function(req, res, next) {
 		req.assert('email', 'Please provide a valid email address.').isEmail();
@@ -96,7 +96,7 @@ exports.login = {
 			return res.redirect('/');
 		}
 
-		res.render('user/login', { title: 'User Login' });
+		res.render('user/login', { title: 'User Login', csrf: req.csrfToken() });
 	},
 	post: function(req, res, next) {
 		req.assert('email', 'Please provide a valid email address.').isEmail();
@@ -144,7 +144,7 @@ exports.register = {
 			return res.redirect('/');
 		}
 
-		res.render('user/register', { title: 'Register User', minimumPasswordLength: config.login.minimumPasswordLength });
+		res.render('user/register', { title: 'Register User', minimumPasswordLength: config.login.minimumPasswordLength, csrf: req.csrfToken() });
 	},
 	post: function(req, res, next) {
 		req.assert('email', 'Please provide a valid email address.').isEmail();
@@ -226,7 +226,7 @@ exports.resetPassword = {
 					return res.redirect('/user/forgot-password');
 				}
 
-				res.render('user/reset-password', { title: 'Reset Password', minimumPasswordLength: config.login.minimumPasswordLength });
+				res.render('user/reset-password', { title: 'Reset Password', minimumPasswordLength: config.login.minimumPasswordLength, csrf: req.csrfToken() });
 			});
 	},
 	post: function(req, res, next) {
@@ -336,7 +336,7 @@ exports.verifyResend = {
 			exports.verifyResend.resendEmail(req, res, req.params.email);
 		}
 		else {
-			res.render('user/verify-resend', { title: 'Re-Send Verification Email' });
+			res.render('user/verify-resend', { title: 'Re-Send Verification Email', csrf: req.csrfToken() });
 		}
 	},
 	post: function(req, res) {
