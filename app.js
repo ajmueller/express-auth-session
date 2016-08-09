@@ -87,6 +87,10 @@ app.use(function(req, res, next) {
 	next(err);
 });
 
+if (app.get('env') === 'production') {
+	app.set('trust proxy', 1);
+}
+
 // error handlers
 
 // development error handler
@@ -99,10 +103,6 @@ if (app.get('env') === 'development') {
 			error: err
 		});
 	});
-}
-
-if (app.get('env') === 'production') {
-	app.set('trust proxy', 1);
 }
 
 // production error handler
