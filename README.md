@@ -1,5 +1,5 @@
-# Express Passport and ACL
-Inspired by [Hackathon Starter](https://github.com/sahat/hackathon-starter), this project is a more simplified boilerplate application with some basic examples of user authentication with [Passport](https://github.com/jaredhanson/passport) and authorization via an [ACL](https://github.com/OptimalBits/node_acl).
+# Express Auth - Session
+Inspired by [Hackathon Starter](https://github.com/sahat/hackathon-starter), this project is a more simplified boilerplate application with some basic examples of user authentication with [Passport](https://github.com/jaredhanson/passport) and authorization via an [ACL](https://github.com/OptimalBits/node_acl).  Authenticated user data is persisted in session cookies and on a MongoDB instance.
 
 ## Services
 This application has been designed to use the free tiers of these services to get a live development environment up and running with minimal effort.  In order to deploy this application as-is, you will need accounts from these services:
