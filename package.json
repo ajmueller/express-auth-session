@@ -8,7 +8,7 @@
   "dependencies": {
     "acl": "https://registry.npmjs.org/acl/-/acl-0.4.9.tgz",
     "async": "^2.0.1",
-    "bcryptjs": "^2.3.0",
+    "bcrypt": "^0.8.5",
     "body-parser": "~1.13.2",
     "connect-mongo": "^1.1.0",
     "cookie-parser": "~1.3.5",
