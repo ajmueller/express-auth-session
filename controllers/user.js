@@ -70,8 +70,8 @@ exports.forgotPassword = {
 				return res.redirect('/user/forgot-password');
 			}
 
-			utility.sendEmail(req.body.email, config.email.sendFrom, 'Password Reset Requested', '<p>You are receiving this email because you requested a password reset.  You have until ' + passwordResetExpires.format('LT z') + ' to reset your password.  You may ignore this email and your password will remain unchanged.</p><a href="' + utility.constructUrl(req, '/user/reset-password/' + passwordResetToken) + '">Reset your password</a>', 'html', function(err, response) {
-					if (err) {
+			utility.sendEmail(req.body.email, config.email.sendFrom, 'Password Reset Requested', '<p>You are receiving this email because you requested a password reset.  You have until ' + passwordResetExpires.format('LT z') + ' to reset your password.  You may ignore this email and your password will remain unchanged.</p><a href="' + utility.constructUrl(req, '/user/reset-password/' + passwordResetToken) + '">Reset your password</a>', 'text/html', function(err, response) {
+				if (err) {
 						console.log(err);
 						req.flash('errors', { msg: 'There was an error sending your password reset email.  Please try again.' });
 						return res.redirect('/user/forgot-password');
@@ -189,7 +189,7 @@ exports.register = {
 						return res.redirect('/');
 					}
 
-					utility.sendEmail(req.body.email, config.email.sendFrom, 'Email Verification Required', '<p>Before you can log in, you must verify your email address:</p><a href="' + utility.constructUrl(req, '/user/verify/' + verificationToken) + '">Verify your email address</a>', 'html', function(err, json) {
+					utility.sendEmail(req.body.email, config.email.sendFrom, 'Email Verification Required', '<p>Before you can log in, you must verify your email address:</p><a href="' + utility.constructUrl(req, '/user/verify/' + verificationToken) + '">Verify your email address</a>', 'text/html', function(err, json) {
 						if (err) {
 							console.log(err);
 							req.flash('errors', { msg: 'There was an error sending your verification email.  Please contact an administrator.' });
@@ -320,7 +320,7 @@ exports.verifyResend = {
 				return res.redirect('/user/login');
 			}
 
-			utility.sendEmail(emailAddress, config.email.sendFrom, 'Email Verification Required', '<p>You have requested a new verification email.  Before you can log in, you must verify your email address:</p><a href="' + utility.constructUrl(req, '/user/verify/' + verificationToken) + '">Verify your email address</a>', 'html', function(err, json) {
+			utility.sendEmail(emailAddress, config.email.sendFrom, 'Email Verification Required', '<p>You have requested a new verification email.  Before you can log in, you must verify your email address:</p><a href="' + utility.constructUrl(req, '/user/verify/' + verificationToken) + '">Verify your email address</a>', 'text/html', function(err, json) {
 					if (err) {
 						console.log(err);
 						req.flash('errors', { msg: 'There was an error sending your verification email.  Please try again.' });
