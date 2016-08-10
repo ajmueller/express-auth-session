@@ -70,7 +70,7 @@ exports.forgotPassword = {
 				return res.redirect('/user/forgot-password');
 			}
 
-			utility.sendEmail(req.body.email, config.email.sendFrom, 'Password Reset Requested', '<p>You are receiving this email because you requested a password reset.  You have until ' + passwordResetExpires.format('LT z') + ' to reset your password.  You may ignore this email and your password will remain unchanged.</p><a href="' + utility.constructUrl(req, '/user/reset-password/' + passwordResetToken) + '">Reset your password</a>', 'html', function(err, json) {
+			utility.sendEmail(req.body.email, config.email.sendFrom, 'Password Reset Requested', '<p>You are receiving this email because you requested a password reset.  You have until ' + passwordResetExpires.format('LT z') + ' to reset your password.  You may ignore this email and your password will remain unchanged.</p><a href="' + utility.constructUrl(req, '/user/reset-password/' + passwordResetToken) + '">Reset your password</a>', 'html', function(err, response) {
 					if (err) {
 						console.log(err);
 						req.flash('errors', { msg: 'There was an error sending your password reset email.  Please try again.' });
