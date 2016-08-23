@@ -1,6 +1,8 @@
 # Express Auth - Session
 Inspired by [Hackathon Starter](https://github.com/sahat/hackathon-starter), this project is a more simplified boilerplate application with some basic examples of user authentication with [Passport](https://github.com/jaredhanson/passport) and authorization via an [ACL](https://github.com/OptimalBits/node_acl).  Authenticated user data is persisted in session cookies and on a MongoDB instance.
 
+This project was originally presented at the [Front End PDX meetup](http://www.meetup.com/Front-End-PDX/events/231046123/).  If you'd like to view the slides presented at the meetup, they're available on [slides.com](http://slides.com/ajmueller/authentication-and-authorization-in-an-express-app).
+
 ## Services
 This application has been designed to use the free tiers of these services to get a live development environment up and running with minimal effort.  In order to deploy this application as-is, you will need accounts from these services:
 
