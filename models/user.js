@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var bcrypt = require('bcryptjs');
+var bcrypt = require('bcrypt');
 var async = require('async');
 var config = require('../config');
 
