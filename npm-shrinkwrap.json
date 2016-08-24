@@ -1471,9 +1471,9 @@
       }
     },
     "sendgrid": {
-      "version": "3.0.0",
-      "from": "sendgrid@3.0.0",
-      "resolved": "https://registry.npmjs.org/sendgrid/-/sendgrid-3.0.0.tgz"
+      "version": "4.0.1",
+      "from": "sendgrid@>=4.0.1 <5.0.0",
+      "resolved": "https://registry.npmjs.org/sendgrid/-/sendgrid-4.0.1.tgz"
     },
     "sendgrid-rest": {
       "version": "2.2.1",
