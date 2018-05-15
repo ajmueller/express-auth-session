@@ -32,16 +32,16 @@ This application has been designed to use the free tiers of these services to ge
 ## Environment Variables
 The below environment variables are needed to get the application up and running.
 
-* `MONGODB_URI` - this only needs to be added manually if you are A) working locally or B) using your own mLab instance that you didn't provision through Heroku.
-* `SENDGRID_API_KEY` - the API key you just created for your SendGrid account.
-* `SEND_EMAILS_FROM` - the email address from which you will send notification emails.
-* `SESSION_SECRET` - the secret key used to encode session data.
 * `ACL_COLLECTION_PREFIX` - the prefix for the ACL data collection in the Mongo database.
-* `MAX_LOGIN_ATTEMPTS` - the maximum number of login attempts a user can perform before being locked out.
 * `LOGIN_ATTEMPTS_LOCKOUT_HOURS` - the amount of time, in hours, that a user is locked out of their account due to exceeding the maximum number of login attempts.
+* `MAX_LOGIN_ATTEMPTS` - the maximum number of login attempts a user can perform before being locked out.
 * `MINIMUM_PASSWORD_LENGTH` - the minimum length of user passwords.
+* `MONGODB_URI` - this only needs to be added manually if you are A) working locally or B) using your own mLab instance that you didn't provision through Heroku.
 * `PASSWORD_HASH_ROUNDS` - the number of rounds for bcrypt to apply its hashing algorithm.  The higher the rounds, the more secure the password is, but the more computing power is needed to hash passwords.  [Choose a number that best balances security and performance](http://security.stackexchange.com/questions/3959/recommended-of-iterations-when-using-pkbdf2-sha256/3993#3993).
 * `PASSWORD_RESET_TIME_LIMIT_IN_HOURS` - the amount of time a user has to reset their password if they go through the "Forgot Password" process.
+* `SEND_EMAILS_FROM` - the email address from which you will send notification emails.
+* `SENDGRID_API_KEY` - the API key you just created for your SendGrid account.
+* `SESSION_SECRET` - the secret key used to encode session data.
 * `TZ` - the timezone of the server.  This is used to calculate times that are sent to users in emails regarding login activity.  Use [this list on Wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for reference using the TZ column.
 
 ## License
